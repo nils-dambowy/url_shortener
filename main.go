@@ -28,9 +28,12 @@ func randomSeq(n int) string {
 	return string(b)
 }
 
-func createRedirect(text string) {
+func createRedirect(text string, collection *mongo.Collection, ctx context.Context) {
 	test := randomSeq(8)
 	fmt.Println("Redirecting '", text, "' to '", test)
+	res, _ := collection.InsertOne(ctx, bson.D{{"name", text}, {"value", test}})
+	id := res.InsertedID
+	fmt.Println("ID: ", id)
 }
 
 func main() {
