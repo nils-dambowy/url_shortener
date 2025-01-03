@@ -56,9 +56,6 @@ func main() {
 	// Select database and collection
 	collection := client.Database("db").Collection("redirects")
 
-	res, _ := collection.InsertOne(ctx, bson.D{{"name", "pi"}, {"value", 3.14159}})
-	id := res.InsertedID
-	fmt.Println("ID: ", id)
 	// init seed
 	rand.New(rand.NewSource(time.Now().UnixNano()))
 
@@ -81,7 +78,7 @@ func main() {
 			r.ParseForm()
 			text := r.FormValue("textfield")
 
-			createRedirect(text)
+			createRedirect(text, collection, ctx)
 
 			// Create a PageData struct with the text entered
 			pageData := PageData{
