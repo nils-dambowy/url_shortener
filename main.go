@@ -28,16 +28,16 @@ func randomSeq(n int) string {
 	return string(b)
 }
 
-func createRedirect(text string, collection *mongo.Collection, ctx context.Context) {
+func createRedirect(input_url string, collection *mongo.Collection, ctx context.Context) {
 	short := randomSeq(8)
 	_, err := collection.InsertOne(ctx, bson.D{
-		{Key: "original_url", Value: text},
+		{Key: "original_url", Value: input_url},
 		{Key: "short_url", Value: short},
 	})
 	if err != nil {
 		fmt.Println("Failed to create redirect:", err)
 	} else {
-		fmt.Printf("Redirecting '%s' to '%s'\n", text, short)
+		fmt.Printf("Redirecting '%s' to '%s'\n", input_url, short)
 	}
 }
 
@@ -81,14 +81,14 @@ func main() {
 
 			// get text
 			r.ParseForm()
-			text := r.FormValue("textfield")
+			input_url := r.FormValue("textfield")
 
-			createRedirect(text, collection, ctx)
+			createRedirect(input_url, collection, ctx)
 
 			// Create a PageData struct with the text entered
 			pageData := PageData{
 				PageTitle: "Simple URI shortener",
-				Text:      text,
+				Text:      input_url,
 			}
 
 			templ, err := template.ParseFiles("layout.html")
