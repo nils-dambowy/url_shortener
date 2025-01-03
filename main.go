@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 
+	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
@@ -52,6 +53,9 @@ func main() {
 	// Select database and collection
 	collection := client.Database("db").Collection("redirects")
 
+	res, _ := collection.InsertOne(ctx, bson.D{{"name", "pi"}, {"value", 3.14159}})
+	id := res.InsertedID
+	fmt.Println("ID: ", id)
 	// init seed
 	rand.New(rand.NewSource(time.Now().UnixNano()))
 
