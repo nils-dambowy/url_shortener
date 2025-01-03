@@ -1,11 +1,16 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"html/template"
 	"math/rand"
 	"net/http"
+	"os"
 	"time"
+
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type PageData struct {
@@ -28,7 +33,24 @@ func createRedirect(text string) {
 }
 
 func main() {
-	fmt.Println("Start the shortener!")
+	fmt.Println("Starting the shortener!")
+
+	url := os.Getenv("MONGO_URL")
+
+	// Create a new client and connect to MongoDB
+	client, err := mongo.Connect(options.Client().ApplyURI(url))
+	if err != nil {
+		fmt.Println("Failed to create MongoDB client: %v", err)
+	}
+
+	// Connect to MongoDB
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	fmt.Println("Connected to MongoDB!")
+
+	// Select database and collection
+	collection := client.Database("db").Collection("redirects")
 
 	// init seed
 	rand.New(rand.NewSource(time.Now().UnixNano()))
