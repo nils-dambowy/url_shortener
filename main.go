@@ -49,12 +49,18 @@ func main() {
 	// Create a new client and connect to MongoDB
 	client, err := mongo.Connect(options.Client().ApplyURI(url))
 	if err != nil {
-		fmt.Println("Failed to create MongoDB client: %v", err)
+		fmt.Printf("Failed to create MongoDB client: %v", err)
 	}
 
 	// Connect to MongoDB
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
+
+	// Ping MongoDB to ensure the connection is established
+	if err := client.Ping(context.Background(), nil); err != nil {
+		fmt.Printf("Failed to ping MongoDB: %v\n", err)
+		os.Exit(1)
+	}
 
 	fmt.Println("Connected to MongoDB!")
 
