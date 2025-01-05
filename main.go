@@ -74,11 +74,16 @@ func main() {
 
 	// handle request to the root url
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		data := PageData{
-			PageTitle: "Simple URL shortener",
-			Text:      "Type in a URL...",
+		path := r.URL.Path
+		if path == "/" {
+			data := PageData{
+				PageTitle: "Simple URL shortener",
+				Text:      "Type in a URL...",
+			}
+			templ.Execute(w, data)
+		} else {
+			fmt.Println("trying to access short url!")
 		}
-		templ.Execute(w, data)
 	})
 
 	// handle url submissions
