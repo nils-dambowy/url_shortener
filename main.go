@@ -43,7 +43,9 @@ func createRedirect(input_url string, collection *mongo.Collection, ctx context.
 		fmt.Printf("Redirecting '%s' to '%s'\n", input_url, short)
 
 		mux := http.NewServeMux()
-		rh := http.RedirectHandler(input_url, 307)
+		rh := http.RedirectHandler(input_url, http.StatusTemporaryRedirect)
+		mux.Handle("/"+short, rh)
+
 	}
 }
 
