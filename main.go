@@ -90,7 +90,7 @@ func main() {
 			}
 			templ.Execute(w, data)
 		} else {
-			fmt.Println("trying to access short url!")
+			fmt.Println("trying to access short url: ", path)
 		}
 	})
 
