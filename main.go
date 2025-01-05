@@ -29,15 +29,21 @@ func randomSeq(n int) string {
 }
 
 func createRedirect(input_url string, collection *mongo.Collection, ctx context.Context) {
+	// create random sequence of letters of length 8
 	short := randomSeq(8)
+
 	_, err := collection.InsertOne(ctx, bson.D{
 		{Key: "original_url", Value: input_url},
 		{Key: "short_url", Value: short},
 	})
+
 	if err != nil {
 		fmt.Println("Failed to create redirect:", err)
 	} else {
 		fmt.Printf("Redirecting '%s' to '%s'\n", input_url, short)
+
+		mux := http.NewServeMux()
+		rh := http.RedirectHandler(input_url, 307)
 	}
 }
 
