@@ -55,7 +55,7 @@ func main() {
 	url := os.Getenv("MONGO_URL")
 
 	// Create a new client and connect to MongoDB
-	client, err := mongo.Connect(options.Client().ApplyURI(url))
+	client, err := mongo.Connect(options.Client().ApplyURI(url).SetMaxPoolSize(100))
 	if err != nil {
 		fmt.Printf("Failed to create MongoDB client: %v", err)
 	}
