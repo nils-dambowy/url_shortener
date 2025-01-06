@@ -42,12 +42,11 @@ func createRedirect(input_url string, collection *mongo.Collection, ctx context.
 		fmt.Println("Failed to create redirect:", err)
 	} else {
 		fmt.Printf("Redirecting '%s' to '%s'\n", input_url, short)
-
-		mux := http.NewServeMux()
-		rh := http.RedirectHandler(input_url, http.StatusTemporaryRedirect)
-		mux.Handle("/"+short, rh)
-
 	}
+}
+
+func getRedirect(shortCode string, collection *mongo.Collection, ctx context.Context) {
+	fmt.Println("trying to get original_url from db:", shortCode)
 }
 
 func main() {
@@ -115,11 +114,12 @@ func main() {
 	})
 
 	http.HandleFunc("/short/", func(w http.ResponseWriter, r *http.Request) {
-		path := r.URL.Path
 		// pattern to get the short url
 		shortPattern := regexp.MustCompile(`.*/([a-zA-Z0-9]{8})$`)
 		matches := shortPattern.FindStringSubmatch(r.URL.Path)
-		fmt.Println("accessing: ", path, matches)
+		shortCode := matches[1]
+
+		getRedirect(shortCode, collection, ctx)
 	})
 
 	http.ListenAndServe(":80", nil)
