@@ -123,6 +123,9 @@ func main() {
 
 	templ := template.Must(template.ParseFiles("new_layout.html"))
 
+	fs := http.FileServer(http.Dir("static"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
 	// handle request to the root url
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		data := PageData{
