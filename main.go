@@ -101,7 +101,7 @@ func main() {
 	}
 
 	// Connect to MongoDB
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Second)
 	defer cancel()
 
 	// Ping MongoDB to ensure the connection is established
