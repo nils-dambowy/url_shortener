@@ -82,16 +82,11 @@ func main() {
 
 	// handle request to the root url
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		path := r.URL.Path
-		if path == "/" {
-			data := PageData{
-				PageTitle: "Simple URL shortener",
-				Text:      "Type in a URL...",
-			}
-			templ.Execute(w, data)
-		} else {
-			fmt.Println("trying to access short url: ", path)
+		data := PageData{
+			PageTitle: "Simple URL shortener",
+			Text:      "Type in a URL...",
 		}
+		templ.Execute(w, data)
 	})
 
 	// handle url submissions
@@ -116,6 +111,11 @@ func main() {
 			}
 			templ.Execute(w, pageData)
 		}
+	})
+
+	http.HandleFunc("/short/", func(w http.ResponseWriter, r *http.Request) {
+		path := r.URL.Path
+		fmt.Println("accessing: ", path)
 	})
 
 	http.ListenAndServe(":80", nil)
