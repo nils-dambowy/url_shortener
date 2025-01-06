@@ -49,7 +49,7 @@ func createRedirect(input_url string, collection *mongo.Collection, ctx context.
 	}
 }
 
-func getRedirect(shortCode string, collection *mongo.Collection, ctx context.Context) {
+func getRedirect(shortCode string, collection *mongo.Collection, ctx context.Context) string {
 	fmt.Println("trying to get original_url from db:", shortCode)
 
 	// filter for the query
@@ -68,6 +68,8 @@ func getRedirect(shortCode string, collection *mongo.Collection, ctx context.Con
 		fmt.Println("No document found with the given short_url")
 	}
 	fmt.Println("original_url: ", result.OriginalURL)
+
+	return result.OriginalURL
 }
 
 func main() {
@@ -140,7 +142,9 @@ func main() {
 		matches := shortPattern.FindStringSubmatch(r.URL.Path)
 		shortCode := matches[1]
 
-		getRedirect(shortCode, collection, ctx)
+		newURL := getRedirect(shortCode, collection, ctx)
+
+		http.Redirect(w, r, newURL, http.StatusTemporaryRedirect)
 	})
 
 	http.ListenAndServe(":80", nil)
