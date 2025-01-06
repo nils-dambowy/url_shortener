@@ -50,30 +50,42 @@ func createRedirect(input_url string, collection *mongo.Collection, ctx context.
 }
 
 func getRedirect(shortCode string, collection *mongo.Collection, ctx context.Context) string {
-	fmt.Println("trying to get original_url from db:", shortCode)
+	fmt.Println("Trying to get original_url from DB for shortCode:", shortCode)
 
-	// filter for the query
+	// Filter for the query
 	filter := bson.D{{Key: "short_url", Value: shortCode}}
 
-	// projection for the query to get only the original_url
+	// Projection to get only the original_url
 	projection := options.FindOne().SetProjection(bson.D{
 		{Key: "original_url", Value: 1},
 		{Key: "_id", Value: 0},
 	})
 
+	// Perform the query
 	query := collection.FindOne(ctx, filter, projection)
-	fmt.Println("query res: ", query)
+
+	// Log the query result object itself
+	fmt.Println("Query result:", query)
+
+	// Decode the result
 	err := query.Decode(&result)
 	if err != nil {
-		fmt.Println("No document found with the given short_url")
+		if err == mongo.ErrNoDocuments {
+			fmt.Println("No document found with the given short_url:", shortCode)
+		} else {
+			fmt.Println("Error while fetching the document:", err)
+		}
+		return "" // Return an empty string if no result is found or an error occurs
 	}
-	fmt.Println("original_url: ", result.OriginalURL)
+
+	// Successfully fetched the document, log the original_url
+	fmt.Println("Original URL found:", result.OriginalURL)
 
 	// Check if the URL already has a protocol (http:// or https://), otherwise add it
 	if !regexp.MustCompile(`^https?://`).MatchString(result.OriginalURL) {
-		// Assuming "http://" if no protocol is present
 		result.OriginalURL = "http://" + result.OriginalURL
 	}
+
 	return result.OriginalURL
 }
 
