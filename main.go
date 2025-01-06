@@ -18,6 +18,7 @@ import (
 type PageData struct {
 	PageTitle string
 	Text      string
+	ShortURL  string
 }
 
 var result struct {
@@ -33,7 +34,7 @@ func randomSeq(n int) string {
 	return string(b)
 }
 
-func createRedirect(input_url string, collection *mongo.Collection, ctx context.Context) {
+func createRedirect(input_url string, collection *mongo.Collection, ctx context.Context) string {
 	// create random sequence of letters of length 8
 	short := randomSeq(8)
 
@@ -47,6 +48,7 @@ func createRedirect(input_url string, collection *mongo.Collection, ctx context.
 	} else {
 		fmt.Printf("Redirecting '%s' to '%s'\n", input_url, short)
 	}
+	return short
 }
 
 func getRedirect(shortCode string, collection *mongo.Collection, ctx context.Context) string {
@@ -138,12 +140,13 @@ func main() {
 			r.ParseForm()
 			input_url := r.FormValue("textfield")
 
-			createRedirect(input_url, collection, ctx)
+			short := createRedirect(input_url, collection, ctx)
 
 			// Create a PageData struct with the text entered
 			pageData := PageData{
 				PageTitle: "Simple URI shortener",
 				Text:      input_url,
+				ShortURL:  short,
 			}
 
 			templ, err := template.ParseFiles("layout.html")
