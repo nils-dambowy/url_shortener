@@ -20,6 +20,10 @@ type PageData struct {
 	Text      string
 }
 
+var result struct {
+	OriginalURL string `bson:"original_url"`
+}
+
 func randomSeq(n int) string {
 	letters := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	b := make([]rune, n)
@@ -47,6 +51,23 @@ func createRedirect(input_url string, collection *mongo.Collection, ctx context.
 
 func getRedirect(shortCode string, collection *mongo.Collection, ctx context.Context) {
 	fmt.Println("trying to get original_url from db:", shortCode)
+
+	// filter for the query
+	filter := bson.D{{Key: "short_url", Value: shortCode}}
+
+	// projection for the query to get only the original_url
+	projection := options.FindOne().SetProjection(bson.D{
+		{Key: "original_url", Value: 1},
+		{Key: "_id", Value: 0},
+	})
+
+	query := collection.FindOne(ctx, filter, projection)
+
+	err := query.Decode(&result)
+	if err != nil {
+		fmt.Println("No document found with the given short_url")
+	}
+	fmt.Println("original_url: ", result.OriginalURL)
 }
 
 func main() {
