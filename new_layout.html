@@ -22,10 +22,10 @@
 
         <form id="link-shortener"
           class="flex flex-col rounded-md border-2 border-slate-800 dark:border-slate-600 p-6 dark:shadow-md shadow-sm rounded-lg bg-slate-700"
-          action="/" method="post">
+          action="/submit" method="post">
           <div class="grow mb-1">
             <label>
-              <input placeholder="Enter a URL to shorten" type="text" name="url" value="{{.Text}}" required
+              <input placeholder="Enter a URL to shorten" type="text" name="textfield" id="url_entry" value="{{.Text}}" required
                 class="w-full border-2 rounded-md py-2 dark:placeholder:text-slate-400 px-3 bg-slate-100 transition ease-in-out delay-150 duration-200 hover:bg-slate-200">
             </label>
           </div>
