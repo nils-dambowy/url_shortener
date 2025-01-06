@@ -121,7 +121,7 @@ func main() {
 	// init seed
 	rand.New(rand.NewSource(time.Now().UnixNano()))
 
-	templ := template.Must(template.ParseFiles("layout.html"))
+	templ := template.Must(template.ParseFiles("new_layout.html"))
 
 	// handle request to the root url
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
