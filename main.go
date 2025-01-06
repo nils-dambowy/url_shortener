@@ -62,7 +62,7 @@ func getRedirect(shortCode string, collection *mongo.Collection, ctx context.Con
 	})
 
 	query := collection.FindOne(ctx, filter, projection)
-
+	fmt.Println("query res: ", query)
 	err := query.Decode(&result)
 	if err != nil {
 		fmt.Println("No document found with the given short_url")
