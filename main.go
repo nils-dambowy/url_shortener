@@ -152,7 +152,7 @@ func main() {
 				ShortURL:  short,
 			}
 
-			templ, err := template.ParseFiles("layout.html")
+			templ, err := template.ParseFiles("new_layout.html")
 			if err != nil {
 				return
 			}
