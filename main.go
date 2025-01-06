@@ -69,6 +69,11 @@ func getRedirect(shortCode string, collection *mongo.Collection, ctx context.Con
 	}
 	fmt.Println("original_url: ", result.OriginalURL)
 
+	// Check if the URL already has a protocol (http:// or https://), otherwise add it
+	if !regexp.MustCompile(`^https?://`).MatchString(result.OriginalURL) {
+		// Assuming "http://" if no protocol is present
+		result.OriginalURL = "http://" + result.OriginalURL
+	}
 	return result.OriginalURL
 }
 
