@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"regexp"
 	"time"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -115,7 +116,10 @@ func main() {
 
 	http.HandleFunc("/short/", func(w http.ResponseWriter, r *http.Request) {
 		path := r.URL.Path
-		fmt.Println("accessing: ", path)
+		// pattern to get the short url
+		shortPattern := regexp.MustCompile(`.*/([a-zA-Z0-9]{8})$`)
+		matches := shortPattern.FindStringSubmatch(r.URL.Path)
+		fmt.Println("accessing: ", path, matches)
 	})
 
 	http.ListenAndServe(":80", nil)
