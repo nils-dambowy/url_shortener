@@ -166,8 +166,7 @@ func main() {
 		matches := shortPattern.FindStringSubmatch(r.URL.Path)
 		shortCode := matches[1]
 
-		baseURL := "https://urlshortener-production-cb5d.up.railway.app/"
-		newURL := baseURL + getRedirect(shortCode, collection, ctx)
+		newURL := getRedirect(shortCode, collection, ctx)
 		http.Redirect(w, r, newURL, http.StatusTemporaryRedirect)
 	})
 
