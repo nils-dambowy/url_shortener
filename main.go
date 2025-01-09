@@ -145,11 +145,12 @@ func main() {
 
 			short := createRedirect(input_url, collection, ctx)
 
+			baseURL := "https://urlshortener-production-cb5d.up.railway.app/short/"
 			// Create a PageData struct with the text entered
 			pageData := PageData{
 				PageTitle: "Simple URI shortener",
 				Text:      input_url,
-				ShortURL:  short,
+				ShortURL:  baseURL + short,
 			}
 
 			templ, err := template.ParseFiles("new_layout.html")
