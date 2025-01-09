@@ -35,8 +35,13 @@
       </div>
     </div>
 
-    <hr class="w-48 h-1 mx-auto my-4 bg-slate-200 dark:bg-slate-800 border-0 shadow-sm rounded md:my-5 md:mb-5">
-      <h2 class="antialiased mx-auto my-auto font-bold text-white text-center text-4xl">The short url code is:{{.ShortURL}}</h2>
+<h2 class="antialiased mx-auto my-auto font-bold text-white text-center text-4xl">
+  The short URL is: 
+  <a href="https://urlshortener-production-cb5d.up.railway.app/short/{{.ShortURL}}" 
+     class="text-blue-400 underline hover:text-blue-600">
+    https://urlshortener-production-cb5d.up.railway.app/short/{{.ShortURL}}
+  </a>
+</h2>
 
   </main>
 </body>
