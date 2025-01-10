@@ -145,7 +145,7 @@ func main() {
 
 			short := createRedirect(input_url, collection, ctx)
 
-			baseURL := "https://urlshortener-production-cb5d.up.railway.app/short/"
+			baseURL := "https://www.tinymap.xyz/short/"
 			// Create a PageData struct with the text entered
 			pageData := PageData{
 				PageTitle: "Simple URI shortener",
